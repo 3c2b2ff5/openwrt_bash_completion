@@ -1,0 +1,30 @@
+#/usr/bin/env bash
+
+_opkg ()
+{
+    local cur prev options commands
+
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    options='-A -f --conf --cache -v --verbosity -d --dest -o --offline-root --verify-program --add-arch --add-dest--add-dest --force-depends --force-maintainer --force-reinstall \
+             --force-overwrite --force-downgrade --force-space --force-postinstall --force-remove --force-checksum --no-check-certificate  --noaction --download-only --nodeps --nocase \
+	         --size --strip-abi --force-removal-of-dependent-packages --autoremove -t --tmp-dir -l --lists-dir -h --help'
+    commands='update upgrade install configure remove flag list list-installed list-upgradable list-changed-conffiles files search find info status download compare-versions \
+              print-architecture depends whatdepends whatdependsrec whatrecommends whatsuggests whatprovides whatconflicts whatreplaces'
+
+    case "${COMP_CWORD}" in
+        1)
+            COMPREPLY=( $(compgen -W "${options} ${commands}" -- "${cur}" ))
+            ;;
+        *)
+            COMPREPLY=()
+            return 0
+            ;;
+    esac
+}
+
+complete -o filenames -F _opkg opkg
+
+# ex: filetype=sh
